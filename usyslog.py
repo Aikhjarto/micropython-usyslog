@@ -6,6 +6,7 @@ Timestamps are not supported for simplicity.
 For more information, see RFC 3164.
 """
 import usocket
+import network
 
 # Facility constants
 F_KERN = const(0)
@@ -78,7 +79,7 @@ class UDPClient(SyslogClient):
         super().__init__(facility)
 
     def log(self, severity, msg):
-        data = "<%d>%s" % (severity + (self._facility << 3), msg)
+        data = "<%d>%s" % (severity + (self._facility << 3), f'{network.hostname()} {msg}')
         self._sock.sendto(data.encode(), self._addr)
         
     def close(self):
